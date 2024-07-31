@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from models import RealEstateOffer
 from schemas import RealEstateOfferSchema
 from database import SessionLocal, engine
-from crud import get_prices
+from crud import get_all_prices, get_prices_for_city
 
 app = FastAPI()
 
@@ -23,15 +23,13 @@ def read_root():
 
 
 @app.get("/prices/", response_model=list[RealEstateOfferSchema])
-def get_users(skip:int=0, limit:int=0, db:Session=Depends(get_db)):
-    prices = get_prices(db,skip=skip,limit=limit)
-
+def get_prices(skip:int=0, limit:int=0, db:Session=Depends(get_db)):
+    prices = get_all_prices(db, skip=skip, limit=limit)
     return prices
 
 
-# @app.get("/prices/", response_model=list[RealEstateOfferSchema])
-# def get_users(skip:int=0, limit:int=0, db:Session=Depends(get_db)):
-#     prices = get_prices(db,skip=skip,limit=limit)
-
-#     return prices
+@app.get("/prices/{city_name}/{market_type}", response_model=list[RealEstateOfferSchema])
+def get_city_prices(city_name:str, market_type: str, skip:int=0, limit:int=0, db:Session=Depends(get_db)):
+    prices = get_prices_for_city(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
+    return prices
 
