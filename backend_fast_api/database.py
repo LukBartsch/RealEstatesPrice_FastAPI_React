@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DB_FILE_PATH = os.path.join(base_dir, os.environ.get('DB_FILE_PATH')) # base_dir / os.environ.get('DB_FILE_PATH')
 SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') + os.environ.get('DB_FILE_PATH')
 
-
+print("DB_FILE_PATH:")
 print(SQLALCHEMY_DATABASE_URI)
 
 #DB_URL = DB_URL = os.getenv("DB_URL")

@@ -28,3 +28,10 @@ def get_users(skip:int=0, limit:int=0, db:Session=Depends(get_db)):
 
     return prices
 
+
+# @app.get("/prices/", response_model=list[RealEstateOfferSchema])
+# def get_users(skip:int=0, limit:int=0, db:Session=Depends(get_db)):
+#     prices = get_prices(db,skip=skip,limit=limit)
+
+#     return prices
+
