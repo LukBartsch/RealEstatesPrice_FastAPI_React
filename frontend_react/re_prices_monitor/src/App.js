@@ -19,26 +19,21 @@ Chart.register(CategoryScale);
 function App() {
 
 
-  const [chartData, setChartData] = useState({
+  const [chartData] = useState({
     // ...chart data
 
 
-    // labels: Data.map((data) => data.year), 
-    // datasets: [
-    //   {
-    //     label: "Users Gained ",
-    //     data: Data.map((data) => data.userGain),
-    //     backgroundColor: [
-    //       "rgba(75,192,192,1)",
-    //       &quot;#ecf0f1",
-    //       "#50AF95",
-    //       "#f3ba2f",
-    //       "#2a71d0"
-    //     ],
-    //     borderColor: "black",
-    //     borderWidth: 2
-    //   }
-    // ]
+    //labels: Data.map((data) => data.year), 
+    labels: [1, 2, 3, 4, 5],
+    datasets: [
+      {
+        label: "Price PLN/m2",
+        //data: Data.map((data) => data.userGain),
+        data: [55, 23, 96, 85, 102],
+        borderColor: "black",
+        borderWidth: 2
+      }
+    ]
   });
 
 
@@ -91,8 +86,13 @@ function App() {
         <h3>Welcome in Real Estate Prices Monitor Application</h3>
       </header>
 
-      <div>Add your components...</div>
-      <div>
+      {/* <div>Add your components...</div> */}
+
+      <div className='Single-Box-Div'>
+        <LineChart chartData={chartData} />
+      </div>
+
+      <div className='Single-Box-Div'>
         <h3>Average prices from last scraping</h3>
         <table className='table table-striped table-bordered table-hover'>
           <thead>
