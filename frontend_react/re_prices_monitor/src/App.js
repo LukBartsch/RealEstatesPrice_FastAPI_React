@@ -18,23 +18,30 @@ Chart.register(CategoryScale);
 
 function App() {
 
-
-  const [chartData] = useState({
-    // ...chart data
+  const [chartDataSet, setChartDataSet] = useState([]);
 
 
-    //labels: Data.map((data) => data.year), 
-    labels: [1, 2, 3, 4, 5],
-    datasets: [
-      {
-        label: "Price PLN/m2",
-        //data: Data.map((data) => data.userGain),
-        data: [55, 23, 96, 85, 102],
-        borderColor: "black",
-        borderWidth: 2
-      }
-    ]
-  });
+  useEffect(() => {
+
+    fetch("http://localhost:8000/prices/Wrocław/wtorny")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parses the JSON response into a JavaScript object
+      })
+      .then(data => {
+        setChartDataSet(data);
+      })
+      .catch(error => {
+        console.log("There was an error retrieving the prices list: ", error);
+      });
+
+  }, []);
+
+
+
+
 
 
   const [prices, setPrices] = useState([]);
@@ -78,6 +85,23 @@ function App() {
       });
 
   }, []);
+
+
+  var chartData = {
+    // ...chart data
+
+    labels: chartDataSet.map((price) => price.date),
+    datasets: [
+      {
+        label: "PLN/m2",
+        data: chartDataSet.map((price) => price.m2_price),
+        borderColor: "black",
+        borderWidth: 2
+      }
+    ]
+  };
+
+  
 
   return (
     <div className="App">
