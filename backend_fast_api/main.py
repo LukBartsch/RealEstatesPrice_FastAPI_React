@@ -37,7 +37,7 @@ def read_root():
 
 
 @app.get("/prices/", response_model=list[RealEstateOfferSchema])
-def get_prices(skip:int=0, limit:int=0, db:Session=Depends(get_db)):
+def get_prices(skip:int=0, limit:int=4, db:Session=Depends(get_db)):
     prices = get_all_prices(db, skip=skip, limit=limit)
     return prices
 
