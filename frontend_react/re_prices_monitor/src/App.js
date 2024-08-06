@@ -19,6 +19,26 @@ Chart.register(CategoryScale);
 function App() {
 
   const [chartDataSet, setChartDataSet] = useState([]);
+  const [chartDataSet_2, setChartDataSet_2] = useState([]);
+
+
+  useEffect(() => {
+
+    fetch("http://localhost:8000/prices/Wrocław/pierwotny")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parses the JSON response into a JavaScript object
+      })
+      .then(data => {
+        setChartDataSet(data);
+      })
+      .catch(error => {
+        console.log("There was an error retrieving the prices list: ", error);
+      });
+
+  }, []);
 
 
   useEffect(() => {
@@ -31,7 +51,7 @@ function App() {
         return response.json(); // Parses the JSON response into a JavaScript object
       })
       .then(data => {
-        setChartDataSet(data);
+        setChartDataSet_2(data);
       })
       .catch(error => {
         console.log("There was an error retrieving the prices list: ", error);
@@ -93,9 +113,15 @@ function App() {
     labels: chartDataSet.map((price) => price.date),
     datasets: [
       {
-        label: "PLN/m2",
+        label: "Wrocław - rynek pierwotny [PLN/m2]",
         data: chartDataSet.map((price) => price.m2_price),
         borderColor: "black",
+        borderWidth: 2
+      },
+      {
+        label: "Wrocław - rynek wtórny [PLN/m2]",
+        data: chartDataSet_2.map((price) => price.m2_price),
+        borderColor: "orange",
         borderWidth: 2
       }
     ]

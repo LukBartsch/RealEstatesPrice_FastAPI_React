@@ -15,7 +15,7 @@ function LineChart({ chartData }) {
               text: "Average Real Estates Price for square meter",
             },
             legend: {
-              display: false
+              display: true
             }
           }
         }}
