@@ -3,7 +3,7 @@
 function SummaryTable({ prices }) {
     return (
       <div>
-        <h3>Average prices from last scraping</h3>
+        <h4>Average prices from last scraping</h4>
         <table className='table table-striped table-bordered table-hover'>
           <thead>
             <tr>

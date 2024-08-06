@@ -28,6 +28,16 @@
   margin: 30px 60px;
 }
 
+.Select-Menus-Box {
+  display: flex;
+  flex-direction: row;
+}
+
+.Single-Select-Box {
+  width: 100%;
+  margin: 20px 30px;
+}
+
 .App-link {
   color: #61dafb;
 }

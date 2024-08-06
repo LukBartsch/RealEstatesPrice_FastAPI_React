@@ -9,6 +9,7 @@ import { CategoryScale } from "chart.js";
 
 import LineChart from "./components/LineChart";
 import SummaryTable from './components/SummaryTable';
+import SelectMenus from './components/SelectMenus';
 
 import { useEffect, useState } from "react";
 
@@ -128,6 +129,17 @@ function App() {
     ]
   };
 
+
+
+  const city_options = [
+    { value: 'Wrocław', label: 'Wrocław' },
+    { value: 'Ostrów Wlkp.', label: 'Ostrów Wlkp.' },
+  ]
+
+  const market_options = [
+    { value: 'pierwotny', label: 'pierwotny' },
+    { value: 'wtorny', label: 'wtórny' },
+  ]
   
 
   return (
@@ -138,6 +150,10 @@ function App() {
       </header>
 
       {/* <div>Add your components...</div> */}
+
+      <div className='Single-Box-Div'>
+        <SelectMenus city_options={city_options} market_options={market_options}/>
+      </div>
 
       <div className='Single-Box-Div'>
         <LineChart chartData={chartData} />
