@@ -4,9 +4,64 @@ import './App.css';
 import React from 'react';
 //import api from './api.js';
 
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+
+import LineChart from "./components/LineChart";
+
 import { useEffect, useState } from "react";
 
+
+Chart.register(CategoryScale);
+
+
+
 function App() {
+
+  const [chartDataSet, setChartDataSet] = useState([]);
+  const [chartDataSet_2, setChartDataSet_2] = useState([]);
+
+
+  useEffect(() => {
+
+    fetch("http://localhost:8000/prices/Wrocław/pierwotny")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parses the JSON response into a JavaScript object
+      })
+      .then(data => {
+        setChartDataSet(data);
+      })
+      .catch(error => {
+        console.log("There was an error retrieving the prices list: ", error);
+      });
+
+  }, []);
+
+
+  useEffect(() => {
+
+    fetch("http://localhost:8000/prices/Wrocław/wtorny")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parses the JSON response into a JavaScript object
+      })
+      .then(data => {
+        setChartDataSet_2(data);
+      })
+      .catch(error => {
+        console.log("There was an error retrieving the prices list: ", error);
+      });
+
+  }, []);
+
+
+
+
 
 
   const [prices, setPrices] = useState([]);
@@ -51,6 +106,29 @@ function App() {
 
   }, []);
 
+
+  var chartData = {
+    // ...chart data
+
+    labels: chartDataSet.map((price) => price.date),
+    datasets: [
+      {
+        label: "Wrocław - rynek pierwotny [PLN/m2]",
+        data: chartDataSet.map((price) => price.m2_price),
+        borderColor: "black",
+        borderWidth: 2
+      },
+      {
+        label: "Wrocław - rynek wtórny [PLN/m2]",
+        data: chartDataSet_2.map((price) => price.m2_price),
+        borderColor: "orange",
+        borderWidth: 2
+      }
+    ]
+  };
+
+  
+
   return (
     <div className="App">
       <header className="App-header">
@@ -58,8 +136,13 @@ function App() {
         <h3>Welcome in Real Estate Prices Monitor Application</h3>
       </header>
 
-      <div>Add your components...</div>
-      <div>
+      {/* <div>Add your components...</div> */}
+
+      <div className='Single-Box-Div'>
+        <LineChart chartData={chartData} />
+      </div>
+
+      <div className='Single-Box-Div'>
         <h3>Average prices from last scraping</h3>
         <table className='table table-striped table-bordered table-hover'>
           <thead>
