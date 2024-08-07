@@ -142,13 +142,14 @@ const fetchPromises = urlsToFetch.map(url =>
 Promise.all(fetchPromises)
     .then(responses => {
         const responseData = responses.map(response => response);
-        console.log('Fetched data:', responseData);
+        //console.log('Fetched data:', responseData);
+        return responseData.data;
 
     })
     .catch(error => console.error('Error fetching data:', error));
 
 
-
+console.log("Promises ", fetchPromises);
   
   var chartData = {
     // ...chart data
