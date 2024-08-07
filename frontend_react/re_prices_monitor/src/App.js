@@ -78,7 +78,7 @@ function App() {
   
   const [selectedValue, handleChange] = useState(city_options[0]);
 
-  console.log("Selected value: ", selectedValue);
+  //console.log("Selected value: ", selectedValue);
 
 
 
@@ -86,9 +86,10 @@ function App() {
   const [chartDataSet_2, setChartDataSet_2] = useState([]);
 
 
+
   useEffect(() => {
 
-    fetch("http://localhost:8000/prices/Wrocław/pierwotny")
+    fetch("http://localhost:8000/prices/" + selectedValue.value + "/pierwotny")
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -102,7 +103,7 @@ function App() {
         console.log("There was an error retrieving the prices list: ", error);
       });
 
-  }, []);
+  }, [selectedValue]);
 
 
   useEffect(() => {
@@ -132,7 +133,7 @@ function App() {
     labels: chartDataSet.map((price) => price.date),
     datasets: [
       {
-        label: "Wrocław - rynek pierwotny [PLN/m2]",
+        label: selectedValue.value + " - rynek pierwotny [PLN/m2]",
         data: chartDataSet.map((price) => price.m2_price),
         borderColor: "black",
         borderWidth: 2
