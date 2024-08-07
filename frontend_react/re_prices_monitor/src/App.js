@@ -87,6 +87,8 @@ function App() {
 
 
 
+
+
   useEffect(() => {
 
     fetch("http://localhost:8000/prices/" + selectedValue.value + "/pierwotny")
@@ -127,6 +129,27 @@ function App() {
 
 
   
+const urlsToFetch = [
+    "http://localhost:8000/prices/Wrocław/pierwotny",
+    "http://localhost:8000/prices/Wrocław/wtorny",
+];
+
+const fetchPromises = urlsToFetch.map(url => 
+    fetch(url)
+        .then(response => response.json())
+);
+
+Promise.all(fetchPromises)
+    .then(responses => {
+        const responseData = responses.map(response => response);
+        console.log('Fetched data:', responseData);
+
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+
+
+  
   var chartData = {
     // ...chart data
 
@@ -146,6 +169,8 @@ function App() {
       }
     ]
   };
+
+
 
 
 
