@@ -20,50 +20,6 @@ Chart.register(CategoryScale);
 
 function App() {
 
-  const [chartDataSet, setChartDataSet] = useState([]);
-  const [chartDataSet_2, setChartDataSet_2] = useState([]);
-
-
-  useEffect(() => {
-
-    fetch("http://localhost:8000/prices/Wrocław/pierwotny")
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parses the JSON response into a JavaScript object
-      })
-      .then(data => {
-        setChartDataSet(data);
-      })
-      .catch(error => {
-        console.log("There was an error retrieving the prices list: ", error);
-      });
-
-  }, []);
-
-
-  useEffect(() => {
-
-    fetch("http://localhost:8000/prices/Wrocław/wtorny")
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parses the JSON response into a JavaScript object
-      })
-      .then(data => {
-        setChartDataSet_2(data);
-      })
-      .catch(error => {
-        console.log("There was an error retrieving the prices list: ", error);
-      });
-
-  }, []);
-
-
-
-
 
 
   const [prices, setPrices] = useState([]);
@@ -109,6 +65,67 @@ function App() {
   }, []);
 
 
+
+  const city_options = [
+    { value: 'Wrocław', label: 'Wrocław' },
+    { value: 'Ostrów Wlkp.', label: 'Ostrów Wlkp.' },
+  ]
+
+  const market_options = [
+    { value: 'pierwotny', label: 'pierwotny' },
+    { value: 'wtorny', label: 'wtórny' },
+  ]
+  
+  const [selectedValue, handleChange] = useState(city_options[0]);
+
+  console.log("Selected value: ", selectedValue);
+
+
+
+  const [chartDataSet, setChartDataSet] = useState([]);
+  const [chartDataSet_2, setChartDataSet_2] = useState([]);
+
+
+  useEffect(() => {
+
+    fetch("http://localhost:8000/prices/Wrocław/pierwotny")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parses the JSON response into a JavaScript object
+      })
+      .then(data => {
+        setChartDataSet(data);
+      })
+      .catch(error => {
+        console.log("There was an error retrieving the prices list: ", error);
+      });
+
+  }, []);
+
+
+  useEffect(() => {
+
+    fetch("http://localhost:8000/prices/Wrocław/wtorny")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parses the JSON response into a JavaScript object
+      })
+      .then(data => {
+        setChartDataSet_2(data);
+      })
+      .catch(error => {
+        console.log("There was an error retrieving the prices list: ", error);
+      });
+
+  }, []);
+
+
+
+  
   var chartData = {
     // ...chart data
 
@@ -131,17 +148,6 @@ function App() {
 
 
 
-  const city_options = [
-    { value: 'Wrocław', label: 'Wrocław' },
-    { value: 'Ostrów Wlkp.', label: 'Ostrów Wlkp.' },
-  ]
-
-  const market_options = [
-    { value: 'pierwotny', label: 'pierwotny' },
-    { value: 'wtorny', label: 'wtórny' },
-  ]
-  
-
   return (
     <div className="App">
       <header className="App-header">
@@ -152,7 +158,7 @@ function App() {
       {/* <div>Add your components...</div> */}
 
       <div className='Single-Box-Div'>
-        <SelectMenus city_options={city_options} market_options={market_options}/>
+        <SelectMenus city_options={city_options} market_options={market_options} selectedValue={selectedValue} handleChange={handleChange}/>
       </div>
 
       <div className='Single-Box-Div'>
