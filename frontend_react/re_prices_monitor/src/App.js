@@ -108,7 +108,7 @@ function App() {
 
   useEffect(() => {
 
-    fetch("http://localhost:8000/prices/Wrocław/wtorny")
+    fetch("http://localhost:8000/prices/" + selectedValue.value + "/wtorny")
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -122,7 +122,7 @@ function App() {
         console.log("There was an error retrieving the prices list: ", error);
       });
 
-  }, []);
+  }, [selectedValue]);
 
 
 
@@ -139,7 +139,7 @@ function App() {
         borderWidth: 2
       },
       {
-        label: "Wrocław - rynek wtórny [PLN/m2]",
+        label: selectedValue.value + " - rynek wtórny [PLN/m2]",
         data: chartDataSet_2.map((price) => price.m2_price),
         borderColor: "orange",
         borderWidth: 2
