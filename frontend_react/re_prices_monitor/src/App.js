@@ -129,27 +129,53 @@ function App() {
 
 
   
-const urlsToFetch = [
-    "http://localhost:8000/prices/Wrocław/pierwotny",
-    "http://localhost:8000/prices/Wrocław/wtorny",
-];
+  // const urlsToFetch = [
+  //     "http://localhost:8000/prices/Wrocław/pierwotny",
+  //     "http://localhost:8000/prices/Wrocław/wtorny",
+  // ];
 
-const fetchPromises = urlsToFetch.map(url => 
-    fetch(url)
-        .then(response => response.json())
-);
+  // const fetchPromises = urlsToFetch.map(url => 
+  //     fetch(url)
+  //         .then(response => response.json())
+  // );
 
-Promise.all(fetchPromises)
-    .then(responses => {
-        const responseData = responses.map(response => response);
-        //console.log('Fetched data:', responseData);
-        return responseData.data;
+  // Promise.all(fetchPromises)
+  //     .then(responses => {
+  //         const responseData = responses.map(response => response);
+  //         //console.log('Fetched data:', responseData);
+  //         return responseData.data;
 
-    })
-    .catch(error => console.error('Error fetching data:', error));
+  //     })
+  //     .catch(error => console.error('Error fetching data:', error));
 
 
-console.log("Promises ", fetchPromises);
+  // console.log("Promises ", fetchPromises);
+
+
+  // Or combine them into one state variable
+  const [combinedData, setCombinedData] = useState([]);
+
+  useEffect(() => {
+    Promise.all([
+      fetch('http://localhost:8000/prices/Wrocław/pierwotny'),
+      fetch('http://localhost:8000/prices/Wrocław/wtorny'),
+    ])
+      .then(([resUsers, resPosts]) => 
+        Promise.all([resUsers.json(), resPosts.json()])
+      )
+      .then((data) => {
+
+        setCombinedData(data);
+      });
+  }, []);
+
+  console.log("Combined data: ", combinedData);
+
+
+
+
+
+
   
   var chartData = {
     // ...chart data
