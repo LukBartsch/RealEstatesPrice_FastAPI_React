@@ -152,24 +152,35 @@ function App() {
   // console.log("Promises ", fetchPromises);
 
 
+
+
+
+
+
+  
   // Or combine them into one state variable
-  const [combinedData, setCombinedData] = useState([]);
+  const [allResponsesData, setAllResponsesData] = useState([]);
+
 
   useEffect(() => {
-    Promise.all([
-      fetch('http://localhost:8000/prices/Wrocław/pierwotny'),
-      fetch('http://localhost:8000/prices/Wrocław/wtorny'),
-    ])
-      .then(([resUsers, resPosts]) => 
-        Promise.all([resUsers.json(), resPosts.json()])
+
+    console.log("City:", selectedValue.value);
+
+    const urlsToFetch = [
+      "http://localhost:8000/prices/Wrocław/pierwotny",
+      "http://localhost:8000/prices/Wrocław/wtorny",
+    ];
+
+    Promise.all(urlsToFetch.map(url => fetch(url)))
+      .then((response) => 
+        Promise.all(response.map(res => res.json()))
       )
       .then((data) => {
-
-        setCombinedData(data);
+        setAllResponsesData(data);
       });
-  }, []);
+  }, [selectedValue]);
 
-  console.log("Combined data: ", combinedData);
+  console.log("Combined data: ", allResponsesData);
 
 
 
