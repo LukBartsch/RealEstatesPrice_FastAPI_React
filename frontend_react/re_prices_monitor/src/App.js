@@ -169,6 +169,8 @@ function App() {
     const urlsToFetch = [
       "http://localhost:8000/prices/Wrocław/pierwotny",
       "http://localhost:8000/prices/Wrocław/wtorny",
+      "http://localhost:8000/prices/Ostrów Wlkp./pierwotny",
+      "http://localhost:8000/prices/Ostrów Wlkp./wtorny",
     ];
 
     Promise.all(urlsToFetch.map(url => fetch(url)))
@@ -180,10 +182,28 @@ function App() {
       });
   }, [selectedValue]);
 
-  console.log("Combined data: ", allResponsesData);
+  //console.log("Combined data: ", allResponsesData);
 
 
 
+
+
+  const dataset_list = [];
+  const dataset_colors = ["black", "orange", "green", "blue"];
+  const dataset_labels = ["Wrocław - rynek pierwotny", "Wrocław - rynek wtórny", "Ostrów Wlkp. - rynek pierwotny", "Ostrów Wlkp. - rynek wtórny"];
+
+  for (let i = 0; i < allResponsesData.length; i++) {
+    dataset_list.push({
+      //label: selectedValue.value + " - rynek " + (i === 0 ? "pierwotny" : "wtórny") + " [PLN/m2]",
+      label: dataset_labels[i] + " [PLN/m2]",
+      data: allResponsesData[i].map((price) => price.m2_price),
+      borderColor: dataset_colors[i],
+      borderWidth: 2
+    });
+  }
+
+
+  //console.log("Data table: ", dataset_list);
 
 
 
@@ -211,6 +231,20 @@ function App() {
 
 
 
+  var chartData2 = {
+    // ...chart data
+
+    labels: chartDataSet.map((price) => price.date),
+    datasets: dataset_list
+  };
+
+
+
+
+
+
+
+
 
   return (
     <div className="App">
@@ -227,6 +261,10 @@ function App() {
 
       <div className='Single-Box-Div'>
         <LineChart chartData={chartData} />
+      </div>
+
+      <div className='Single-Box-Div'>
+        <LineChart chartData={chartData2} />
       </div>
 
       <div className='Single-Box-Div'>
