@@ -77,6 +77,7 @@ function App() {
   ]
   
   const [selectedValue, handleChange] = useState(city_options[0]);
+  const [selectedMarket, handleChangeMarket] = useState(market_options[0]);
 
   //console.log("Selected value: ", selectedValue);
 
@@ -153,10 +154,26 @@ function App() {
 
 
 
+  console.log("Market:", selectedMarket);
+
+
+
+  const choices = [];
+
+
+  if (Array.isArray(selectedMarket)) {
+    for (let i = 0; i < selectedMarket.length; i++) {
+      choices.push(selectedMarket[i].value);
+    }
+  } else {
+    choices.push(selectedMarket.value);
+  }
 
 
 
 
+
+  
   
   // Or combine them into one state variable
   const [allResponsesData, setAllResponsesData] = useState([]);
@@ -164,7 +181,24 @@ function App() {
 
   useEffect(() => {
 
-    console.log("City:", selectedValue.value);
+    //console.log("City:", selectedValue.value);
+    //console.log("Market:", selectedMarket);
+
+    //const urls = [];
+
+
+    // sprawdzamy, czy selectedMarket jest typu array
+    // if (Array.isArray(selectedMarket)) {
+    //     urls.push("http://localhost:8000/prices/" + selectedValue.value + "/");
+    //   } else {
+    //     urls.push("http://localhost:8000/prices/" + selectedValue.value + "///");
+    //   }
+
+    // for (let i = 0; i < selectedValue.length; i++) {
+    //   urls.push("http://localhost:8000/prices/" + selectedValue.value + "/");
+    // }
+
+    //console.log("MARKET: ", selectedMarket);
 
     const urlsToFetch = [
       "http://localhost:8000/prices/Wrocław/pierwotny",
@@ -180,7 +214,7 @@ function App() {
       .then((data) => {
         setAllResponsesData(data);
       });
-  }, [selectedValue]);
+  }, []);
 
   //console.log("Combined data: ", allResponsesData);
 
@@ -256,7 +290,9 @@ function App() {
       {/* <div>Add your components...</div> */}
 
       <div className='Single-Box-Div'>
-        <SelectMenus city_options={city_options} market_options={market_options} selectedValue={selectedValue} handleChange={handleChange}/>
+        <SelectMenus city_options={city_options} market_options={market_options} 
+                      selectedValueCity={selectedValue} selectedValueMarket={selectedMarket} 
+                      handleChangeCity={handleChange} handleChangeMarket={handleChangeMarket} />
       </div>
 
       <div className='Single-Box-Div'>
