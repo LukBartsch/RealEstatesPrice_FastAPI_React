@@ -77,7 +77,10 @@ function App() {
   ]
   
   const [selectedValue, handleChange] = useState(city_options[0]);
-  const [selectedMarket, handleChangeMarket] = useState(market_options[0]);
+  //const [selectedMarket, handleChangeMarket] = useState(market_options[0]);
+  const [selectedMarket, setSelectedMarket] = useState([]);
+
+
 
   //console.log("Selected value: ", selectedValue);
 
@@ -154,7 +157,7 @@ function App() {
 
 
 
-  console.log("Market:", selectedMarket);
+  //console.log("Market:", selectedMarket);
 
 
 
@@ -176,65 +179,89 @@ function App() {
   
   
   // Or combine them into one state variable
-  const [allResponsesData, setAllResponsesData] = useState([]);
+  //const [allResponsesData, setAllResponsesData] = useState([]);
+
+
+
+
+
+
+
+  //const [dataset, setDataset] = useState([]);
+
+  const [chartDataSet_test, setChartDataSet_test] = useState([]);
 
 
   useEffect(() => {
 
-    //console.log("City:", selectedValue.value);
-    //console.log("Market:", selectedMarket);
+    const urlsToFetch = []
 
-    //const urls = [];
+    if (selectedMarket.length > 0) {
+      for (let i = 0; i < selectedMarket.length; i++) {
+        urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/" + selectedMarket[i].value);
+      }
+    } else {
+      urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/wtorny");
+    }
 
+    //console.log("Urls to fetch: ", urlsToFetch);
 
-    // sprawdzamy, czy selectedMarket jest typu array
-    // if (Array.isArray(selectedMarket)) {
-    //     urls.push("http://localhost:8000/prices/" + selectedValue.value + "/");
-    //   } else {
-    //     urls.push("http://localhost:8000/prices/" + selectedValue.value + "///");
-    //   }
+    //const tmp = urlsToFetch[0]
 
-    // for (let i = 0; i < selectedValue.length; i++) {
-    //   urls.push("http://localhost:8000/prices/" + selectedValue.value + "/");
-    // }
-
-    //console.log("MARKET: ", selectedMarket);
-
-    const urlsToFetch = [
-      "http://localhost:8000/prices/Wrocław/pierwotny",
-      "http://localhost:8000/prices/Wrocław/wtorny",
-      "http://localhost:8000/prices/Ostrów Wlkp./pierwotny",
-      "http://localhost:8000/prices/Ostrów Wlkp./wtorny",
-    ];
-
-    Promise.all(urlsToFetch.map(url => fetch(url)))
-      .then((response) => 
-        Promise.all(response.map(res => res.json()))
-      )
-      .then((data) => {
-        setAllResponsesData(data);
-      });
-  }, []);
-
-  //console.log("Combined data: ", allResponsesData);
+    //console.log("Tmp: ", tmp);
 
 
-
-
-
-  const dataset_list = [];
-  const dataset_colors = ["black", "orange", "green", "blue"];
-  const dataset_labels = ["Wrocław - rynek pierwotny", "Wrocław - rynek wtórny", "Ostrów Wlkp. - rynek pierwotny", "Ostrów Wlkp. - rynek wtórny"];
-
-  for (let i = 0; i < allResponsesData.length; i++) {
-    dataset_list.push({
-      //label: selectedValue.value + " - rynek " + (i === 0 ? "pierwotny" : "wtórny") + " [PLN/m2]",
-      label: dataset_labels[i] + " [PLN/m2]",
-      data: allResponsesData[i].map((price) => price.m2_price),
-      borderColor: dataset_colors[i],
-      borderWidth: 2
+  fetch(urlsToFetch[0](url => url))
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json(); // Parses the JSON response into a JavaScript object
+    })
+    .then(data => {
+      setChartDataSet_test(data);
+    })
+    .catch(error => {
+      console.log("There was an error retrieving the prices list: ", error);
     });
-  }
+
+
+  }, [selectedValue, selectedMarket]);
+
+
+  console.log("Chart data test: ", chartDataSet_test);
+
+
+
+
+
+
+
+
+
+  const handleChangeMarket = (selected) => {
+
+    setSelectedMarket(selected || []);
+  };
+
+
+
+
+
+
+  // const dataset_list = [];
+  // const dataset_colors = ["black", "orange", "green", "blue"];
+  // const dataset_labels = ["Wrocław - rynek pierwotny", "Wrocław - rynek wtórny", "Ostrów Wlkp. - rynek pierwotny", "Ostrów Wlkp. - rynek wtórny"];
+
+  // for (let i = 0; i < allResponsesData.length; i++) {
+  //   dataset_list.push({
+  //     //label: selectedValue.value + " - rynek " + (i === 0 ? "pierwotny" : "wtórny") + " [PLN/m2]",
+  //     label: dataset_labels[i] + " [PLN/m2]",
+  //     data: allResponsesData[i].map((price) => price.m2_price),
+  //     borderColor: dataset_colors[i],
+  //     borderWidth: 2
+  //   });
+  // }
 
 
   //console.log("Data table: ", dataset_list);
@@ -265,12 +292,13 @@ function App() {
 
 
 
-  var chartData2 = {
-    // ...chart data
+  // var chartData2 = {
+  //   // ...chart data
 
-    labels: chartDataSet.map((price) => price.date),
-    datasets: dataset_list
-  };
+  //   labels: chartDataSet.map((price) => price.date),
+  //   datasets: dataset_list
+  // };
+
 
 
 
@@ -299,9 +327,13 @@ function App() {
         <LineChart chartData={chartData} />
       </div>
 
-      <div className='Single-Box-Div'>
+      {/* <div className='Single-Box-Div'>
         <LineChart chartData={chartData2} />
-      </div>
+      </div> */}
+
+      {/* <div className='Single-Box-Div'>
+        <LineChart chartData={chartDataSet_test} />
+      </div> */}
 
       <div className='Single-Box-Div'>
         <SummaryTable prices={prices}/>

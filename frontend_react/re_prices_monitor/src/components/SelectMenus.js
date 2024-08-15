@@ -22,11 +22,11 @@ function SelectMenus({ city_options, market_options,
         <div className='Single-Select-Box'>
           <h4>Select market</h4>
           <Select 
-              value={selectedValueMarket}
+              //value={selectedValueMarket}
               options={market_options} 
               isMulti
-              //defaultValue= {[market_options[0]]}
-              onChange={e => handleChangeMarket(e)}
+              defaultValue= {market_options[0]}
+              onChange={handleChangeMarket}
           />
         </div>
       </div>
