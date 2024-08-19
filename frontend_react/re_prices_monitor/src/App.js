@@ -78,7 +78,7 @@ function App() {
   
   const [selectedValue, handleChange] = useState(city_options[0]);
   //const [selectedMarket, handleChangeMarket] = useState(market_options[0]);
-  const [selectedMarket, setSelectedMarket] = useState([]);
+  const [selectedMarket, setSelectedMarket] = useState([market_options[0]]);
 
 
 
@@ -161,16 +161,16 @@ function App() {
 
 
 
-  const choices = [];
+  // const choices = [];
 
 
-  if (Array.isArray(selectedMarket)) {
-    for (let i = 0; i < selectedMarket.length; i++) {
-      choices.push(selectedMarket[i].value);
-    }
-  } else {
-    choices.push(selectedMarket.value);
-  }
+  // if (Array.isArray(selectedMarket)) {
+  //   for (let i = 0; i < selectedMarket.length; i++) {
+  //     choices.push(selectedMarket[i].value);
+  //   }
+  // } else {
+  //   choices.push(selectedMarket.value);
+  // }
 
 
 
@@ -189,47 +189,50 @@ function App() {
 
   //const [dataset, setDataset] = useState([]);
 
-  const [chartDataSet_test, setChartDataSet_test] = useState([]);
+  //const [chartDataSet_test, setChartDataSet_test] = useState([]);
 
 
   useEffect(() => {
 
     const urlsToFetch = []
 
-    if (selectedMarket.length > 0) {
+    var markets = ""
+
+    if (selectedMarket.length > 1) {
       for (let i = 0; i < selectedMarket.length; i++) {
-        urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/" + selectedMarket[i].value);
+        markets += selectedMarket[i].value + ",";
       }
+      urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/" + markets);
     } else {
-      urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/wtorny");
+      urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/" + selectedMarket[0].value);
     }
 
-    //console.log("Urls to fetch: ", urlsToFetch);
+    console.log("Url to fetch: ", urlsToFetch);
 
     //const tmp = urlsToFetch[0]
 
     //console.log("Tmp: ", tmp);
 
 
-  fetch(urlsToFetch[0](url => url))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json(); // Parses the JSON response into a JavaScript object
-    })
-    .then(data => {
-      setChartDataSet_test(data);
-    })
-    .catch(error => {
-      console.log("There was an error retrieving the prices list: ", error);
-    });
+  // fetch(urlsToFetch[0](url => url))
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+  //     return response.json(); // Parses the JSON response into a JavaScript object
+  //   })
+  //   .then(data => {
+  //     setChartDataSet_test(data);
+  //   })
+  //   .catch(error => {
+  //     console.log("There was an error retrieving the prices list: ", error);
+  //   });
 
 
   }, [selectedValue, selectedMarket]);
 
 
-  console.log("Chart data test: ", chartDataSet_test);
+  //console.log("Chart data test: ", chartDataSet_test);
 
 
 
