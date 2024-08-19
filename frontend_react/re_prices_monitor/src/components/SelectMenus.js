@@ -3,19 +3,18 @@ import Select from 'react-select'
 //import AsyncSelect from 'react-select/async';
 
 
-function SelectMenus({ city_options, market_options, 
-                        selectedValueCity, selectedValueMarket, 
+function SelectMenus({ city_options, market_options,
                           handleChangeCity, handleChangeMarket }) {
     return (
       <div className='Select-Menus-Box'>
         <div className='Single-Select-Box'>
           <h4>Select city</h4>
           <Select
-              value={selectedValueCity} 
+              //value={selectedValueCity} 
               options={city_options} 
-              //isMulti
-              //defaultValue= {selectedValue}
-              onChange={e => handleChangeCity(e)}
+              isMulti
+              defaultValue= {city_options[0]}
+              onChange={handleChangeCity}
           />
         </div>
         

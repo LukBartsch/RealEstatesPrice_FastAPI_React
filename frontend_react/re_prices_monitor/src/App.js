@@ -76,7 +76,7 @@ function App() {
     { value: 'wtorny', label: 'wtórny' },
   ]
   
-  const [selectedValue, handleChange] = useState(city_options[0]);
+  const [selectedValue, setSelectedCity] = useState([city_options[0]]);
   //const [selectedMarket, handleChangeMarket] = useState(market_options[0]);
   const [selectedMarket, setSelectedMarket] = useState([market_options[0]]);
 
@@ -95,7 +95,7 @@ function App() {
 
   useEffect(() => {
 
-    fetch("http://localhost:8000/prices/" + selectedValue.value + "/pierwotny")
+    fetch("http://localhost:8000/prices/" + selectedValue[0].value + "/pierwotny")
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -114,7 +114,7 @@ function App() {
 
   useEffect(() => {
 
-    fetch("http://localhost:8000/prices/" + selectedValue.value + "/wtorny")
+    fetch("http://localhost:8000/prices/" + selectedValue[0].value + "/wtorny")
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -196,21 +196,23 @@ function App() {
 
   useEffect(() => {
 
-    const urlsToFetch = []
+    //const urlsToFetch = []
 
     const urls_test = []
 
     const dataset_labels  = []
 
-    var markets = ""
+    //var markets = ""
 
-    if (selectedMarket.length > 0) {
-      for (let i = 0; i < selectedMarket.length; i++) {
-        markets += selectedMarket[i].value + ",";
-        urls_test.push("http://localhost:8000/prices/" + selectedValue.value + "/" + selectedMarket[i].value);
-        dataset_labels.push(selectedValue.value + " - rynek " + selectedMarket[i].value);
+    if (selectedMarket.length > 0 && selectedValue.length > 0) {
+      for (let j = 0; j < selectedValue.length; j++) {
+        for (let i = 0; i < selectedMarket.length; i++) {
+          //markets += selectedMarket[i].value + ",";
+          urls_test.push("http://localhost:8000/prices/" + selectedValue[j].value + "/" + selectedMarket[i].value);
+          dataset_labels.push(selectedValue[j].value + " - rynek " + selectedMarket[i].value);
+        }
       }
-      urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/" + markets);
+      //urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/" + markets);
     } 
 
     setDatasetLabels(dataset_labels);
@@ -247,7 +249,10 @@ function App() {
 
 
 
+  const handleChangeCity = (selected) => {
 
+    setSelectedCity(selected || []);
+  };
 
 
 
@@ -262,16 +267,15 @@ function App() {
 
 
 
-  const dataset_list = [];
-  const dataset_colors = ["black", "orange", "green", "blue"];
-  // const dataset_labels = ["Wrocław - rynek pierwotny", "Wrocław - rynek wtórny", "Ostrów Wlkp. - rynek pierwotny", "Ostrów Wlkp. - rynek wtórny"];
-
+  const datasetList = [];
+  const datasetColors = ["black", "orange", "grey", 'rgba(75, 192, 192, 1)'];
+ 
   for (let i = 0; i < chartDataSet_test.length; i++) {
-    dataset_list.push({
+    datasetList.push({
       //label: selectedValue.value + " - rynek " + (i === 0 ? "pierwotny" : "wtórny") + " [PLN/m2]",
       label: DatasetLabels[i] + " [PLN/m2]",
       data: chartDataSet_test[i].map((price) => price.m2_price),
-      borderColor: dataset_colors[i],
+      borderColor: datasetColors[i],
       borderWidth: 2
     });
   }
@@ -309,7 +313,7 @@ function App() {
     // ...chart data
 
     labels: chartDataSet.map((price) => price.date),
-    datasets: dataset_list
+    datasets: datasetList
   };
 
 
@@ -333,7 +337,7 @@ function App() {
       <div className='Single-Box-Div'>
         <SelectMenus city_options={city_options} market_options={market_options} 
                       selectedValueCity={selectedValue} selectedValueMarket={selectedMarket} 
-                      handleChangeCity={handleChange} handleChangeMarket={handleChangeMarket} />
+                      handleChangeCity={handleChangeCity} handleChangeMarket={handleChangeMarket} />
       </div>
 
       <div className='Single-Box-Div'>
