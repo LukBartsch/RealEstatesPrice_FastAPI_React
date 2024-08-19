@@ -189,29 +189,34 @@ function App() {
 
   //const [dataset, setDataset] = useState([]);
 
-  //const [chartDataSet_test, setChartDataSet_test] = useState([]);
+  const [chartDataSet_test, setChartDataSet_test] = useState([]);
 
 
   useEffect(() => {
 
     const urlsToFetch = []
 
+    const urls_test = []
+
     var markets = ""
 
-    if (selectedMarket.length > 1) {
+    if (selectedMarket.length > 0) {
       for (let i = 0; i < selectedMarket.length; i++) {
         markets += selectedMarket[i].value + ",";
+        urls_test.push("http://localhost:8000/prices/" + selectedValue.value + "/" + selectedMarket[i].value);
       }
       urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/" + markets);
-    } else {
-      urlsToFetch.push("http://localhost:8000/prices/" + selectedValue.value + "/" + selectedMarket[0].value);
-    }
+    } 
 
-    console.log("Url to fetch: ", urlsToFetch);
 
-    //const tmp = urlsToFetch[0]
 
-    //console.log("Tmp: ", tmp);
+    Promise.all(urls_test.map(url => fetch(url).then(response => response.json())))
+      .then(responses => {
+        setChartDataSet_test(responses);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
 
 
   // fetch(urlsToFetch[0](url => url))
@@ -232,7 +237,7 @@ function App() {
   }, [selectedValue, selectedMarket]);
 
 
-  //console.log("Chart data test: ", chartDataSet_test);
+  console.log("Chart data test: ", chartDataSet_test);
 
 
 

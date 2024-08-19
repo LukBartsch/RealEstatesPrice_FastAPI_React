@@ -27,6 +27,7 @@ function SelectMenus({ city_options, market_options,
               isMulti
               defaultValue= {market_options[0]}
               onChange={handleChangeMarket}
+              
           />
         </div>
       </div>
