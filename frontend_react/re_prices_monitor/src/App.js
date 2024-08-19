@@ -21,30 +21,7 @@ Chart.register(CategoryScale);
 function App() {
 
 
-
   const [prices, setPrices] = useState([]);
-
-  // const fetchPrices = async () => {
-  //   const response = await api.get('/prices/');
-  //   setPrices(response.data);
-  // };
-
-  // useEffect(() => {
-  //   fetchPrices();
-  // }, []);
-
-
-
-  // useEffect(() => {
-  //   const fetchPrices = async () => {
-  //     const response = await api.get('/prices/');
-  //     setPrices(response.data);
-  //   };
-
-  //   fetchPrices();
-  // }, []);
-
-
 
   useEffect(() => {
 
@@ -76,75 +53,93 @@ function App() {
     { value: 'wtorny', label: 'wtórny' },
   ]
   
-  const [selectedValue, handleChange] = useState(city_options[0]);
+  const [selectedValue, setSelectedCity] = useState([city_options[0]]);
+  const [selectedMarket, setSelectedMarket] = useState([market_options[0]]);
 
-  //console.log("Selected value: ", selectedValue);
+
+  const [chartLabelsDataSet, setChartLabelsDataSet] = useState([]);
+
+
+  useEffect(() => {
+
+    fetch("http://localhost:8000/prices/Wrocław/pierwotny")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parses the JSON response into a JavaScript object
+      })
+      .then(data => {
+        setChartLabelsDataSet(data);
+      })
+      .catch(error => {
+        console.log("There was an error retrieving the prices list: ", error);
+      });
+
+  }, [selectedValue]);
 
 
 
   const [chartDataSet, setChartDataSet] = useState([]);
-  const [chartDataSet_2, setChartDataSet_2] = useState([]);
-
-
-
-  useEffect(() => {
-
-    fetch("http://localhost:8000/prices/" + selectedValue.value + "/pierwotny")
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parses the JSON response into a JavaScript object
-      })
-      .then(data => {
-        setChartDataSet(data);
-      })
-      .catch(error => {
-        console.log("There was an error retrieving the prices list: ", error);
-      });
-
-  }, [selectedValue]);
+  const [DatasetLabels, setDatasetLabels] = useState([]);
 
 
   useEffect(() => {
 
-    fetch("http://localhost:8000/prices/" + selectedValue.value + "/wtorny")
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    const urlsToFetch = []
+    const datasetLabels  = []
+
+    if (selectedMarket.length > 0 && selectedValue.length > 0) {
+      for (let j = 0; j < selectedValue.length; j++) {
+        for (let i = 0; i < selectedMarket.length; i++) {
+          urlsToFetch.push("http://localhost:8000/prices/" + selectedValue[j].value + "/" + selectedMarket[i].value);
+          datasetLabels.push(selectedValue[j].value + " - rynek " + selectedMarket[i].value);
         }
-        return response.json(); // Parses the JSON response into a JavaScript object
-      })
-      .then(data => {
-        setChartDataSet_2(data);
-      })
-      .catch(error => {
-        console.log("There was an error retrieving the prices list: ", error);
-      });
-
-  }, [selectedValue]);
-
-
-
-  
-  var chartData = {
-    // ...chart data
-
-    labels: chartDataSet.map((price) => price.date),
-    datasets: [
-      {
-        label: selectedValue.value + " - rynek pierwotny [PLN/m2]",
-        data: chartDataSet.map((price) => price.m2_price),
-        borderColor: "black",
-        borderWidth: 2
-      },
-      {
-        label: selectedValue.value + " - rynek wtórny [PLN/m2]",
-        data: chartDataSet_2.map((price) => price.m2_price),
-        borderColor: "orange",
-        borderWidth: 2
       }
-    ]
+    } 
+
+    setDatasetLabels(datasetLabels);
+
+    Promise.all(urlsToFetch.map(url => fetch(url).then(response => response.json())))
+      .then(responses => {
+        setChartDataSet(responses);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+
+  }, [selectedValue, selectedMarket]);
+
+
+ 
+
+  const handleChangeCity = (selected) => {
+    setSelectedCity(selected || []);
+  };
+
+
+  const handleChangeMarket = (selected) => {
+    setSelectedMarket(selected || []);
+  };
+
+
+
+
+  const datasetList = [];
+  const datasetColors = ["black", "orange", "grey", 'rgba(75, 192, 192, 1)'];
+ 
+  for (let i = 0; i < chartDataSet.length; i++) {
+    datasetList.push({
+      label: DatasetLabels[i] + " [PLN/m2]",
+      data: chartDataSet[i].map((price) => price.m2_price),
+      borderColor: datasetColors[i],
+      borderWidth: 2
+    });
+  }
+
+  var chartData = {
+    labels: chartLabelsDataSet.map((price) => price.date),
+    datasets: datasetList
   };
 
 
@@ -159,12 +154,15 @@ function App() {
       {/* <div>Add your components...</div> */}
 
       <div className='Single-Box-Div'>
-        <SelectMenus city_options={city_options} market_options={market_options} selectedValue={selectedValue} handleChange={handleChange}/>
+        <SelectMenus city_options={city_options} market_options={market_options} 
+                      selectedValueCity={selectedValue} selectedValueMarket={selectedMarket} 
+                      handleChangeCity={handleChangeCity} handleChangeMarket={handleChangeMarket} />
       </div>
 
       <div className='Single-Box-Div'>
         <LineChart chartData={chartData} />
       </div>
+
 
       <div className='Single-Box-Div'>
         <SummaryTable prices={prices}/>

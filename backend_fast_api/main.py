@@ -43,7 +43,7 @@ def get_prices(skip:int=0, limit:int=4, db:Session=Depends(get_db)):
 
 
 @app.get("/prices/{city_name}/{market_type}", response_model=list[RealEstateOfferSchema])
-def get_city_prices(city_name:str, market_type: str, skip:int=0, limit:int=100, db:Session=Depends(get_db)):
+async def get_city_prices(city_name:str, market_type: str, skip:int=0, limit:int=100, db:Session=Depends(get_db)):
     prices = get_prices_for_city(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
     return prices
 
