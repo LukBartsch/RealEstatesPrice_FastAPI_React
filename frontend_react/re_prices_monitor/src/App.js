@@ -26,18 +26,18 @@ function App() {
 
 
 
-  const city_options = [
+  const cityOptions = [
     { value: 'Wrocław', label: 'Wrocław' },
     { value: 'Ostrów Wlkp.', label: 'Ostrów Wlkp.' },
   ]
 
-  const market_options = [
+  const marketOptions = [
     { value: 'pierwotny', label: 'pierwotny' },
     { value: 'wtorny', label: 'wtórny' },
   ]
   
-  const [selectedValue, setSelectedCity] = useState([city_options[0]]);
-  const [selectedMarket, setSelectedMarket] = useState([market_options[0]]);
+  const [selectedValue, setSelectedCity] = useState([cityOptions[0]]);
+  const [selectedMarket, setSelectedMarket] = useState([marketOptions[0]]);
 
 
   const [chartXaxisLabels, setChartXaxisLabels] = useState([]);
@@ -89,7 +89,7 @@ function App() {
       {/* <div>Add your components...</div> */}
 
       <div className='Single-Box-Div'>
-        <SelectMenus city_options={city_options} market_options={market_options} 
+        <SelectMenus cityOptions={cityOptions} marketOptions={marketOptions} 
                       selectedValueCity={selectedValue} selectedValueMarket={selectedMarket} 
                       handleChangeCity={handleChangeCity} handleChangeMarket={handleChangeMarket} />
       </div>
