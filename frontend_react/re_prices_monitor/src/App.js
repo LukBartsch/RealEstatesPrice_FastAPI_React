@@ -2,7 +2,6 @@ import logo from './logo.svg';
 import './App.css';
 
 import React from 'react';
-//import api from './api.js';
 
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
