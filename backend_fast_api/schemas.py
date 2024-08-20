@@ -17,3 +17,10 @@ class RealEstateOfferSchema(BaseModel):
 
     class Config:
         orm_model = True
+
+
+class CitySchema(BaseModel):
+    city_name: str
+
+    class Config:
+        orm_model = True
