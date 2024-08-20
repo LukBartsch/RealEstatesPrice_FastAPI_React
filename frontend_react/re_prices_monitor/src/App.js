@@ -8,7 +8,7 @@ import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 
 import LineChart from "./components/LineChart";
-import LastPrices from './components/GetCurrentPrices'; 
+import { LastPrices, ChartXaxisLabels } from './components/GetDataFunctions'; 
 import SummaryTable from './components/SummaryTable';
 import SelectMenus from './components/SelectMenus';
 
@@ -23,26 +23,7 @@ function App() {
 
 
   const [prices, setPrices] = useState([]);
-
   LastPrices(setPrices);
-
-  // useEffect(() => {
-
-  //   fetch("http://localhost:8000/prices/")
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       return response.json(); // Parses the JSON response into a JavaScript object
-  //     })
-  //     .then(data => {
-  //       setPrices(data);
-  //     })
-  //     .catch(error => {
-  //       console.log("There was an error retrieving the prices list: ", error);
-  //     });
-
-  // }, []);
 
 
 
@@ -60,26 +41,8 @@ function App() {
   const [selectedMarket, setSelectedMarket] = useState([market_options[0]]);
 
 
-  const [chartLabelsDataSet, setChartLabelsDataSet] = useState([]);
-
-
-  useEffect(() => {
-
-    fetch("http://localhost:8000/prices/Wrocław/pierwotny")
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parses the JSON response into a JavaScript object
-      })
-      .then(data => {
-        setChartLabelsDataSet(data);
-      })
-      .catch(error => {
-        console.log("There was an error retrieving the prices list: ", error);
-      });
-
-  }, [selectedValue]);
+  const [chartXaxisLabels, setChartXaxisLabels] = useState([]);
+  ChartXaxisLabels(setChartXaxisLabels);
 
 
 
@@ -141,7 +104,7 @@ function App() {
   }
 
   var chartData = {
-    labels: chartLabelsDataSet.map((price) => price.date),
+    labels: chartXaxisLabels.map((price) => price.date),
     datasets: datasetList
   };
 
