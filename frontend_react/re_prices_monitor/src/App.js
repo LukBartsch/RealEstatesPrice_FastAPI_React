@@ -46,7 +46,7 @@ function App() {
 
 
   const [chartDataSet, setChartDataSet] = useState([]);
-  const [DatasetLabels, setDatasetLabels] = useState([]);
+  const [datasetLabels, setDatasetLabels] = useState([]);
   FetchMultipleData(selectedValue, selectedMarket, setChartDataSet, setDatasetLabels);
 
 
@@ -66,7 +66,7 @@ function App() {
  
   for (let i = 0; i < chartDataSet.length; i++) {
     datasetList.push({
-      label: DatasetLabels[i] + " [PLN/m2]",
+      label: datasetLabels[i] + " [PLN/m2]",
       data: chartDataSet[i].map((price) => price.m2_price),
       borderColor: datasetColors[i],
       borderWidth: 2
