@@ -43,3 +43,33 @@ export const ChartXaxisLabels = (setChartXaxisLabels) => {
       }, [setChartXaxisLabels]);
 };
 
+
+export const FetchMultipleData = (selectedValue, selectedMarket, setChartDataSet, setDatasetLabels) => {
+
+  useEffect(() => {
+
+    const urlsToFetch = []
+    const datasetLabels  = []
+
+    if (selectedMarket.length > 0 && selectedValue.length > 0) {
+      for (let j = 0; j < selectedValue.length; j++) {
+        for (let i = 0; i < selectedMarket.length; i++) {
+          urlsToFetch.push("http://localhost:8000/prices/" + selectedValue[j].value + "/" + selectedMarket[i].value);
+          datasetLabels.push(selectedValue[j].value + " - rynek " + selectedMarket[i].value);
+        }
+      }
+    } 
+
+    setDatasetLabels(datasetLabels);
+
+    Promise.all(urlsToFetch.map(url => fetch(url).then(response => response.json())))
+      .then(responses => {
+        setChartDataSet(responses);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+
+  }, [selectedValue, selectedMarket, setChartDataSet, setDatasetLabels]);
+
+};

@@ -6,16 +6,16 @@ import React from 'react';
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 
+import { LastPrices, ChartXaxisLabels, FetchMultipleData } from './components/GetDataFunctions';
+
 import LineChart from "./components/LineChart";
-import { LastPrices, ChartXaxisLabels } from './components/GetDataFunctions'; 
 import SummaryTable from './components/SummaryTable';
 import SelectMenus from './components/SelectMenus';
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 Chart.register(CategoryScale);
-
 
 
 function App() {
@@ -47,36 +47,9 @@ function App() {
 
   const [chartDataSet, setChartDataSet] = useState([]);
   const [DatasetLabels, setDatasetLabels] = useState([]);
+  FetchMultipleData(selectedValue, selectedMarket, setChartDataSet, setDatasetLabels);
 
 
-  useEffect(() => {
-
-    const urlsToFetch = []
-    const datasetLabels  = []
-
-    if (selectedMarket.length > 0 && selectedValue.length > 0) {
-      for (let j = 0; j < selectedValue.length; j++) {
-        for (let i = 0; i < selectedMarket.length; i++) {
-          urlsToFetch.push("http://localhost:8000/prices/" + selectedValue[j].value + "/" + selectedMarket[i].value);
-          datasetLabels.push(selectedValue[j].value + " - rynek " + selectedMarket[i].value);
-        }
-      }
-    } 
-
-    setDatasetLabels(datasetLabels);
-
-    Promise.all(urlsToFetch.map(url => fetch(url).then(response => response.json())))
-      .then(responses => {
-        setChartDataSet(responses);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-
-  }, [selectedValue, selectedMarket]);
-
-
- 
 
   const handleChangeCity = (selected) => {
     setSelectedCity(selected || []);
@@ -86,8 +59,6 @@ function App() {
   const handleChangeMarket = (selected) => {
     setSelectedMarket(selected || []);
   };
-
-
 
 
   const datasetList = [];
@@ -106,7 +77,6 @@ function App() {
     labels: chartXaxisLabels.map((price) => price.date),
     datasets: datasetList
   };
-
 
 
   return (
