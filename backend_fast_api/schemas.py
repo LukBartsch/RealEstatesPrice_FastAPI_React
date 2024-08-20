@@ -24,3 +24,10 @@ class CitySchema(BaseModel):
 
     class Config:
         orm_model = True
+
+
+class MarketTypeSchema(BaseModel):
+    market_type: str
+
+    class Config:
+        orm_model = True

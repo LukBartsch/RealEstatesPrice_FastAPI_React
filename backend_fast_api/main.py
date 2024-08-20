@@ -2,9 +2,9 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from models import RealEstateOffer
-from schemas import RealEstateOfferSchema, CitySchema
+from schemas import RealEstateOfferSchema, CitySchema, MarketTypeSchema
 from database import SessionLocal, engine
-from crud import get_all_prices, get_prices_for_city, get_all_city
+from crud import get_all_prices, get_prices_for_city, get_all_city, get_all_market_types
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -52,4 +52,10 @@ async def get_city_prices(city_name:str, market_type: str, skip:int=0, limit:int
 def get_city_options(db:Session=Depends(get_db)):
     cities = get_all_city(db)
     return cities
+
+
+@app.get("/market_options/", response_model=list[MarketTypeSchema])
+def get_markets_options(db:Session=Depends(get_db)):
+    markets = get_all_market_types(db)
+    return markets
 

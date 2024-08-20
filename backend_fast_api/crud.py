@@ -15,3 +15,6 @@ def get_prices_for_city(db: Session, city_name: str, market_type: str, skip:int=
 def get_all_city(db: Session):
     return db.query(RealEstateOffer.city_name).distinct().all()
 
+
+def get_all_market_types(db: Session):
+    return db.query(RealEstateOffer.market_type).distinct().all()
