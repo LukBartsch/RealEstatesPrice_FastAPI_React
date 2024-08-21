@@ -6,7 +6,7 @@ import React from 'react';
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 
-import { LastPrices, CityOptions, MarketOptions, ChartXaxisLabels, FetchMultipleData } from './components/GetDataFunctions';
+import { LastPrices, CityOptions, MarketOptions, FetchMultipleData } from './components/GetDataFunctions';
 
 import LineChart from "./components/LineChart";
 import SummaryTable from './components/SummaryTable';
@@ -53,10 +53,6 @@ function App() {
   const [selectedMarket, setSelectedMarket] = useState([marketOptions[0]]);
 
 
-  const [chartXaxisLabels, setChartXaxisLabels] = useState([]);
-  ChartXaxisLabels(setChartXaxisLabels);
-
-
   const [chartDataSet, setChartDataSet] = useState([]);
   const [datasetLabels, setDatasetLabels] = useState([]);
   FetchMultipleData(selectedValue, selectedMarket, setChartDataSet, setDatasetLabels);
@@ -73,9 +69,14 @@ function App() {
 
 
   const datasetList = [];
+  var xAxisLabels = [];
   const datasetColors = ["black", "orange", "grey", 'rgba(75, 192, 192, 1)'];
  
   for (let i = 0; i < chartDataSet.length; i++) {
+
+    if (i === 0) {
+      xAxisLabels = chartDataSet[i].map((price) => price.date);
+    }
     datasetList.push({
       label: datasetLabels[i] + " [PLN/m2]",
       data: chartDataSet[i].map((price) => price.m2_price),
@@ -85,9 +86,10 @@ function App() {
   }
 
   var chartData = {
-    labels: chartXaxisLabels.map((price) => price.date),
+    labels: xAxisLabels,
     datasets: datasetList
   };
+
 
 
   return (

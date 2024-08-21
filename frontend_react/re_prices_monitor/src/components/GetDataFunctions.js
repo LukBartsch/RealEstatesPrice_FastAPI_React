@@ -67,28 +67,6 @@ export const MarketOptions = (setMarketOptions) => {
 };
 
 
-export const ChartXaxisLabels = (setChartXaxisLabels) => {
-
-    useEffect(() => {
-
-        fetch("http://localhost:8000/prices/Wrocław/pierwotny")
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json(); // Parses the JSON response into a JavaScript object
-          })
-          .then(data => {
-            setChartXaxisLabels(data);
-          })
-          .catch(error => {
-            console.log("There was an error retrieving the chart labels: ", error);
-          });
-    
-      }, [setChartXaxisLabels]);
-};
-
-
 export const FetchMultipleData = (selectedValue, selectedMarket, setChartDataSet, setDatasetLabels) => {
 
   useEffect(() => {
