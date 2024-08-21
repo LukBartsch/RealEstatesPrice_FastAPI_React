@@ -69,6 +69,7 @@ async def get_historical_data():
 
     base_dir = Path(__file__).resolve().parent.parent
     data_file = os.path.join(base_dir, 'historical_real_estates_prices.csv')
+    data = []
     osw_pierwotny = [] # row[1]
     wro_pierwotny = []
     osw_wtorny = [] # row[3]
@@ -80,6 +81,8 @@ async def get_historical_data():
         for row in reader:
             historical_row_wro_pierwotny = HistoricalDataSchema(date=row[0], city_name="Wrocław", market_type="pierwotny", m2_price=row[2])
             wro_pierwotny.append(historical_row_wro_pierwotny)
+
+        #data.append(wro_pierwotny)
 
     return wro_pierwotny
 
