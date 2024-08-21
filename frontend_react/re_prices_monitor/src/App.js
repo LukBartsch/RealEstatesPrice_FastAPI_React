@@ -6,7 +6,7 @@ import React from 'react';
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 
-import { LastPrices, ChartXaxisLabels, FetchMultipleData } from './components/GetDataFunctions';
+import { LastPrices, CityOptions, MarketOptions, ChartXaxisLabels, FetchMultipleData } from './components/GetDataFunctions';
 
 import LineChart from "./components/LineChart";
 import SummaryTable from './components/SummaryTable';
@@ -25,30 +25,41 @@ function App() {
   LastPrices(setPrices);
 
 
+  const [cityOptionsFromDB, setCityOptions] = useState([]);
+  CityOptions(setCityOptions);
 
-  const city_options = [
-    { value: 'Wrocław', label: 'Wrocław' },
-    { value: 'Ostrów Wlkp.', label: 'Ostrów Wlkp.' },
-  ]
+  const cityOptions = []
+  if (cityOptionsFromDB.length === 0) {
+    cityOptions.push({value: 'Wrocław', label: 'Wrocław'})
+  } else {
+    for (let i = 0; i < cityOptionsFromDB.length; i++) {
+      cityOptions.push({ value: cityOptionsFromDB[i].city_name, label: cityOptionsFromDB[i].city_name });
+    }
+  }
 
-  const market_options = [
-    { value: 'pierwotny', label: 'pierwotny' },
-    { value: 'wtorny', label: 'wtórny' },
-  ]
+  const [marketOptionsFromDB, setMarketOptions] = useState([]);
+  MarketOptions(setMarketOptions);
+
+  const marketOptions = []
+  if (marketOptionsFromDB.length === 0) {
+    marketOptions.push({value: 'pierwotny', label: 'pierwotny'})
+  } else {
+    for (let i = 0; i < marketOptionsFromDB.length; i++) {
+      marketOptions.push({ value: marketOptionsFromDB[i].market_type, label: marketOptionsFromDB[i].market_type });
+    }
+  }
   
-  const [selectedValue, setSelectedCity] = useState([city_options[0]]);
-  const [selectedMarket, setSelectedMarket] = useState([market_options[0]]);
+  const [selectedValue, setSelectedCity] = useState([cityOptions[0]]);
+  const [selectedMarket, setSelectedMarket] = useState([marketOptions[0]]);
 
 
   const [chartXaxisLabels, setChartXaxisLabels] = useState([]);
   ChartXaxisLabels(setChartXaxisLabels);
 
 
-
   const [chartDataSet, setChartDataSet] = useState([]);
   const [datasetLabels, setDatasetLabels] = useState([]);
   FetchMultipleData(selectedValue, selectedMarket, setChartDataSet, setDatasetLabels);
-
 
 
   const handleChangeCity = (selected) => {
@@ -89,7 +100,7 @@ function App() {
       {/* <div>Add your components...</div> */}
 
       <div className='Single-Box-Div'>
-        <SelectMenus city_options={city_options} market_options={market_options} 
+        <SelectMenus cityOptions={cityOptions} marketOptions={marketOptions} 
                       selectedValueCity={selectedValue} selectedValueMarket={selectedMarket} 
                       handleChangeCity={handleChangeCity} handleChangeMarket={handleChangeMarket} />
       </div>

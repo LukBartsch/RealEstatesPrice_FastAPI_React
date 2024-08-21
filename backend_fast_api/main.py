@@ -2,9 +2,9 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from models import RealEstateOffer
-from schemas import RealEstateOfferSchema
+from schemas import RealEstateOfferSchema, CitySchema, MarketTypeSchema
 from database import SessionLocal, engine
-from crud import get_all_prices, get_prices_for_city
+from crud import get_all_prices, get_prices_for_city, get_all_city, get_all_market_types
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -37,7 +37,7 @@ def read_root():
 
 
 @app.get("/prices/", response_model=list[RealEstateOfferSchema])
-def get_prices(skip:int=0, limit:int=4, db:Session=Depends(get_db)):
+async def get_prices(skip:int=0, limit:int=4, db:Session=Depends(get_db)):
     prices = get_all_prices(db, skip=skip, limit=limit)
     return prices
 
@@ -46,4 +46,16 @@ def get_prices(skip:int=0, limit:int=4, db:Session=Depends(get_db)):
 async def get_city_prices(city_name:str, market_type: str, skip:int=0, limit:int=100, db:Session=Depends(get_db)):
     prices = get_prices_for_city(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
     return prices
+
+
+@app.get("/city_options/", response_model=list[CitySchema])
+async def get_city_options(db:Session=Depends(get_db)):
+    cities = get_all_city(db)
+    return cities
+
+
+@app.get("/market_options/", response_model=list[MarketTypeSchema])
+async def get_markets_options(db:Session=Depends(get_db)):
+    markets = get_all_market_types(db)
+    return markets
 
