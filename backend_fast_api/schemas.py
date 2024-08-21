@@ -36,8 +36,7 @@ class MarketTypeSchema(BaseModel):
 class HistoricalDataSchema(BaseModel):
 
     date: str
-    osw_p: str
-    wro_p: str
-    osw_w: str
-    wro_w: str
+    city_name: str
+    market_type: str
+    m2_price: int
 
