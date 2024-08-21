@@ -6,7 +6,7 @@ import React from 'react';
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 
-import { LastPrices, CityOptions, ChartXaxisLabels, FetchMultipleData } from './components/GetDataFunctions';
+import { LastPrices, CityOptions, MarketOptions, ChartXaxisLabels, FetchMultipleData } from './components/GetDataFunctions';
 
 import LineChart from "./components/LineChart";
 import SummaryTable from './components/SummaryTable';
@@ -37,10 +37,17 @@ function App() {
     }
   }
 
-  const marketOptions = [
-    { value: 'pierwotny', label: 'pierwotny' },
-    { value: 'wtorny', label: 'wtórny' },
-  ]
+  const [marketOptionsFromDB, setMarketOptions] = useState([]);
+  MarketOptions(setMarketOptions);
+
+  const marketOptions = []
+  if (marketOptionsFromDB.length === 0) {
+    marketOptions.push({value: 'pierwotny', label: 'pierwotny'})
+  } else {
+    for (let i = 0; i < marketOptionsFromDB.length; i++) {
+      marketOptions.push({ value: marketOptionsFromDB[i].market_type, label: marketOptionsFromDB[i].market_type });
+    }
+  }
   
   const [selectedValue, setSelectedCity] = useState([cityOptions[0]]);
   const [selectedMarket, setSelectedMarket] = useState([marketOptions[0]]);
@@ -50,11 +57,9 @@ function App() {
   ChartXaxisLabels(setChartXaxisLabels);
 
 
-
   const [chartDataSet, setChartDataSet] = useState([]);
   const [datasetLabels, setDatasetLabels] = useState([]);
   FetchMultipleData(selectedValue, selectedMarket, setChartDataSet, setDatasetLabels);
-
 
 
   const handleChangeCity = (selected) => {
