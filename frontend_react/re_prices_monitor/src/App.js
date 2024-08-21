@@ -6,7 +6,7 @@ import React from 'react';
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 
-import { LastPrices, ChartXaxisLabels, FetchMultipleData } from './components/GetDataFunctions';
+import { LastPrices, CityOptions, ChartXaxisLabels, FetchMultipleData } from './components/GetDataFunctions';
 
 import LineChart from "./components/LineChart";
 import SummaryTable from './components/SummaryTable';
@@ -25,11 +25,17 @@ function App() {
   LastPrices(setPrices);
 
 
+  const [cityOptionsFromDB, setCityOptions] = useState([]);
+  CityOptions(setCityOptions);
 
-  const cityOptions = [
-    { value: 'Wrocław', label: 'Wrocław' },
-    { value: 'Ostrów Wlkp.', label: 'Ostrów Wlkp.' },
-  ]
+  const cityOptions = []
+  if (cityOptionsFromDB.length === 0) {
+    cityOptions.push({value: 'Wrocław', label: 'Wrocław'})
+  } else {
+    for (let i = 0; i < cityOptionsFromDB.length; i++) {
+      cityOptions.push({ value: cityOptionsFromDB[i].city_name, label: cityOptionsFromDB[i].city_name });
+    }
+  }
 
   const marketOptions = [
     { value: 'pierwotny', label: 'pierwotny' },

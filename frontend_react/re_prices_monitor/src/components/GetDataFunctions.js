@@ -22,6 +22,30 @@ export const LastPrices = (setPrices) => {
 };
 
 
+
+export const CityOptions = (setCityOptions) => {
+
+    useEffect(() => {
+
+        fetch("http://localhost:8000/city_options")
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json(); // Parses the JSON response into a JavaScript object
+          })
+          .then(data => {
+            setCityOptions(data);
+          })
+          .catch(error => {
+            console.log("There was an error retrieving the city options: ", error);
+          });
+    
+      }, [setCityOptions]);
+
+};
+
+
 export const ChartXaxisLabels = (setChartXaxisLabels) => {
 
     useEffect(() => {

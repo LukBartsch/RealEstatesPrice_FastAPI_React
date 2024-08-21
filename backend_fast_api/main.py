@@ -37,7 +37,7 @@ def read_root():
 
 
 @app.get("/prices/", response_model=list[RealEstateOfferSchema])
-def get_prices(skip:int=0, limit:int=4, db:Session=Depends(get_db)):
+async def get_prices(skip:int=0, limit:int=4, db:Session=Depends(get_db)):
     prices = get_all_prices(db, skip=skip, limit=limit)
     return prices
 
@@ -49,13 +49,13 @@ async def get_city_prices(city_name:str, market_type: str, skip:int=0, limit:int
 
 
 @app.get("/city_options/", response_model=list[CitySchema])
-def get_city_options(db:Session=Depends(get_db)):
+async def get_city_options(db:Session=Depends(get_db)):
     cities = get_all_city(db)
     return cities
 
 
 @app.get("/market_options/", response_model=list[MarketTypeSchema])
-def get_markets_options(db:Session=Depends(get_db)):
+async def get_markets_options(db:Session=Depends(get_db)):
     markets = get_all_market_types(db)
     return markets
 
