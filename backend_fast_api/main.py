@@ -2,10 +2,14 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from models import RealEstateOffer
-from schemas import RealEstateOfferSchema, CitySchema, MarketTypeSchema
+from schemas import RealEstateOfferSchema, CitySchema, MarketTypeSchema, HistoricalDataSchema
 from database import SessionLocal, engine
 from crud import get_all_prices, get_prices_for_city, get_all_city, get_all_market_types
 from fastapi.middleware.cors import CORSMiddleware
+
+import csv
+from pathlib import Path
+import os
 
 app = FastAPI()
 
@@ -58,4 +62,22 @@ async def get_city_options(db:Session=Depends(get_db)):
 async def get_markets_options(db:Session=Depends(get_db)):
     markets = get_all_market_types(db)
     return markets
+
+
+@app.get("/get_historical_data/", response_model=list[HistoricalDataSchema])
+async def get_historical_data():
+
+    base_dir = Path(__file__).resolve().parent.parent
+    data_file = os.path.join(base_dir, 'historical_real_estates_prices.csv')
+    data = []
+    with open(data_file, mode="r", encoding="latin-1") as file:
+        reader = csv.reader(file, delimiter=";")
+        next(reader)
+
+        for row in reader:
+            historical_row = HistoricalDataSchema(date=row[0], osw_p=row[1], wro_p=row[2], osw_w=row[3], wro_w=row[4])
+            data.append(historical_row)
+
+
+    return data
 

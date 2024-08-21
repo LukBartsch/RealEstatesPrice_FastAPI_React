@@ -31,3 +31,13 @@ class MarketTypeSchema(BaseModel):
 
     class Config:
         orm_model = True
+
+
+class HistoricalDataSchema(BaseModel):
+
+    date: str
+    osw_p: str
+    wro_p: str
+    osw_w: str
+    wro_w: str
+
