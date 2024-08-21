@@ -67,18 +67,18 @@ export const MarketOptions = (setMarketOptions) => {
 };
 
 
-export const FetchMultipleData = (selectedValue, selectedMarket, setChartDataSet, setDatasetLabels) => {
+export const FetchMultipleData = (selectedCity, selectedMarket, selectedDataType, setChartDataSet, setDatasetLabels) => {
 
   useEffect(() => {
 
     const urlsToFetch = []
     const datasetLabels  = []
 
-    if (selectedMarket.length > 0 && selectedValue.length > 0) {
-      for (let j = 0; j < selectedValue.length; j++) {
+    if (selectedMarket.length > 0 && selectedCity.length > 0) {
+      for (let j = 0; j < selectedCity.length; j++) {
         for (let i = 0; i < selectedMarket.length; i++) {
-          urlsToFetch.push("http://localhost:8000/prices/" + selectedValue[j].value + "/" + selectedMarket[i].value);
-          datasetLabels.push(selectedValue[j].value + " - rynek " + selectedMarket[i].value);
+          urlsToFetch.push("http://localhost:8000/prices/" + selectedCity[j].value + "/" + selectedMarket[i].value);
+          datasetLabels.push(selectedCity[j].value + " - rynek " + selectedMarket[i].value);
         }
       }
     } 
@@ -93,6 +93,6 @@ export const FetchMultipleData = (selectedValue, selectedMarket, setChartDataSet
         console.error('Error fetching data:', error);
       });
 
-  }, [selectedValue, selectedMarket, setChartDataSet, setDatasetLabels]);
+  }, [selectedCity, selectedMarket, selectedDataType, setChartDataSet, setDatasetLabels]);
 
 };

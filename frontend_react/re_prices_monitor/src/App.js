@@ -48,24 +48,33 @@ function App() {
       marketOptions.push({ value: marketOptionsFromDB[i].market_type, label: marketOptionsFromDB[i].market_type });
     }
   }
+
+  const dataTypes = [
+    {value: 'Current data', label: 'Current data'}, 
+    {value: 'Historical data', label: 'Historical data'}
+  ];
   
-  const [selectedValue, setSelectedCity] = useState([cityOptions[0]]);
+  const [selectedCity, setSelectedCity] = useState([cityOptions[0]]);
   const [selectedMarket, setSelectedMarket] = useState([marketOptions[0]]);
+  const [selectedDataType, setSelectedDataType] = useState([dataTypes[0]]);
 
 
   const [chartDataSet, setChartDataSet] = useState([]);
   const [datasetLabels, setDatasetLabels] = useState([]);
-  FetchMultipleData(selectedValue, selectedMarket, setChartDataSet, setDatasetLabels);
+  FetchMultipleData(selectedCity, selectedMarket, selectedDataType, setChartDataSet, setDatasetLabels);
 
 
   const handleChangeCity = (selected) => {
     setSelectedCity(selected || []);
   };
 
-
   const handleChangeMarket = (selected) => {
     setSelectedMarket(selected || []);
   };
+
+  const handleChangeDataType = (selected) => {
+    setSelectedDataType(selected || []);
+  }
 
 
   const datasetList = [];
@@ -102,9 +111,8 @@ function App() {
       {/* <div>Add your components...</div> */}
 
       <div className='Single-Box-Div'>
-        <SelectMenus cityOptions={cityOptions} marketOptions={marketOptions} 
-                      selectedValueCity={selectedValue} selectedValueMarket={selectedMarket} 
-                      handleChangeCity={handleChangeCity} handleChangeMarket={handleChangeMarket} />
+        <SelectMenus cityOptions={cityOptions} marketOptions={marketOptions} dataTypesOptions={dataTypes}
+                      handleChangeCity={handleChangeCity} handleChangeMarket={handleChangeMarket} handleChangeDataType={handleChangeDataType}/>
       </div>
 
       <div className='Single-Box-Div'>

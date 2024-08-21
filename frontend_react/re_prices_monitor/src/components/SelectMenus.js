@@ -3,8 +3,8 @@ import Select from 'react-select'
 //import AsyncSelect from 'react-select/async';
 
 
-function SelectMenus({ cityOptions, marketOptions,
-                          handleChangeCity, handleChangeMarket }) {
+function SelectMenus({ cityOptions, marketOptions, dataTypesOptions,
+                          handleChangeCity, handleChangeMarket, handleChangeDataType }) {
     return (
       <div className='Select-Menus-Box'>
         <div className='Single-Select-Box'>
@@ -24,6 +24,16 @@ function SelectMenus({ cityOptions, marketOptions,
               isMulti
               defaultValue= {marketOptions[0]}
               onChange={handleChangeMarket}
+          />
+        </div>
+
+        <div className='Single-Select-Box'>
+          <h4>Select data typet</h4>
+          <Select 
+              options={dataTypesOptions} 
+              //isMulti
+              defaultValue= {dataTypesOptions[0]}
+              onChange={handleChangeDataType}
           />
         </div>
       </div>
