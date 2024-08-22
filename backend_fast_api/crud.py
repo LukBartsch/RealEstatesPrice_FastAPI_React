@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from models import RealEstateOffer
+from models import RealEstateOffer, HistoricRealEstatePrice
 
 
 
@@ -18,3 +18,7 @@ def get_all_city(db: Session):
 
 def get_all_market_types(db: Session):
     return db.query(RealEstateOffer.market_type).distinct().all()
+
+
+def get_historical_prices(db: Session, city_name: str, market_type: str, skip:int=0, limit: int=100):
+    return db.query(HistoricRealEstatePrice).filter(HistoricRealEstatePrice.city_name == city_name).filter(HistoricRealEstatePrice.market_type == market_type).filter(HistoricRealEstatePrice.m2_price != 0).all()

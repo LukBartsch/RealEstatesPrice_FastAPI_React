@@ -1,15 +1,12 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 
-from models import RealEstateOffer
+from models import RealEstateOffer, HistoricRealEstatePrice
 from schemas import RealEstateOfferSchema, CitySchema, MarketTypeSchema, HistoricalDataSchema
 from database import SessionLocal, engine
-from crud import get_all_prices, get_prices_for_city, get_all_city, get_all_market_types
+from crud import get_all_prices, get_prices_for_city, get_all_city, get_all_market_types, get_historical_prices
 from fastapi.middleware.cors import CORSMiddleware
 
-import csv
-from pathlib import Path
-import os
 
 app = FastAPI()
 
@@ -64,29 +61,8 @@ async def get_markets_options(db:Session=Depends(get_db)):
     return markets
 
 
-@app.get("/get_historical_data/", response_model=list[HistoricalDataSchema])
-async def get_historical_data():
-
-    base_dir = Path(__file__).resolve().parent.parent
-    data_file = os.path.join(base_dir, 'historical_real_estates_prices.csv')
-    data = []
-    osw_pierwotny = [] # row[1]
-    wro_pierwotny = []
-    osw_wtorny = [] # row[3]
-    wro_wtorny = [] # row[4]
-    with open(data_file, mode="r", encoding="latin-1") as file:
-        reader = csv.reader(file, delimiter=";")
-        next(reader)
-
-        for row in reader:
-            historical_row_osw_pierwotny = HistoricalDataSchema(date=row[0], city_name="Ostrów Wlkp.", market_type="pierwotny", m2_price=str(row[1]))
-            historical_row_wro_pierwotny = HistoricalDataSchema(date=row[0], city_name="Wrocław", market_type="pierwotny", m2_price=str(row[2]))
-            historical_row_wro_wtorny = HistoricalDataSchema(date=row[0], city_name="Wrocław", market_type="wtorny", m2_price=str(row[4]))
-            osw_pierwotny.append(historical_row_osw_pierwotny)
-            wro_pierwotny.append(historical_row_wro_pierwotny)
-            wro_wtorny.append(historical_row_wro_wtorny)
-
-        data.append(wro_pierwotny)
-
-    return osw_pierwotny
+@app.get("/get_historical_data/{city_name}/{market_type}", response_model=list[HistoricalDataSchema])
+async def get_historical_data(city_name:str, market_type: str, skip:int=0, limit:int=100, db:Session=Depends(get_db)):
+    historical_prices = get_historical_prices(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
+    return historical_prices
 
