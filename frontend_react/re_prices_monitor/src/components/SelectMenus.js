@@ -31,7 +31,7 @@ function SelectMenus({ cityOptions, marketOptions, dataTypesOptions,
           <h4>Select data typet</h4>
           <Select 
               options={dataTypesOptions} 
-              //isMulti
+              isMulti
               defaultValue= {dataTypesOptions[0]}
               onChange={handleChangeDataType}
           />

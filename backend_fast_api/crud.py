@@ -22,3 +22,7 @@ def get_all_market_types(db: Session):
 
 def get_historical_prices(db: Session, city_name: str, market_type: str, skip:int=0, limit: int=100):
     return db.query(HistoricRealEstatePrice).filter(HistoricRealEstatePrice.city_name == city_name).filter(HistoricRealEstatePrice.market_type == market_type).all()
+
+
+def get_shorter_prices(db: Session, city_name: str, market_type: str, skip:int=0, limit: int=100):
+    return db.query(RealEstateOffer).filter(RealEstateOffer.city_name == city_name).filter(RealEstateOffer.market_type == market_type).with_entities(RealEstateOffer.date, RealEstateOffer.city_name, RealEstateOffer.market_type, RealEstateOffer.m2_price).all()

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from models import RealEstateOffer, HistoricRealEstatePrice
 from schemas import RealEstateOfferSchema, CitySchema, MarketTypeSchema, HistoricalDataSchema
 from database import SessionLocal, engine
-from crud import get_all_prices, get_prices_for_city, get_all_city, get_all_market_types, get_historical_prices
+from crud import get_all_prices, get_prices_for_city, get_all_city, get_all_market_types, get_historical_prices, get_shorter_prices
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -61,8 +61,16 @@ async def get_markets_options(db:Session=Depends(get_db)):
     return markets
 
 
-@app.get("/get_historical_data/{city_name}/{market_type}", response_model=list[HistoricalDataSchema])
+@app.get("/historical_prices/{city_name}/{market_type}", response_model=list[HistoricalDataSchema])
 async def get_historical_data(city_name:str, market_type: str, skip:int=0, limit:int=100, db:Session=Depends(get_db)):
     historical_prices = get_historical_prices(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
     return historical_prices
+
+
+@app.get("/combined_prices/{city_name}/{market_type}", response_model=list[HistoricalDataSchema])
+async def get_combined_data(city_name:str, market_type: str, skip:int=0, limit:int=100, db:Session=Depends(get_db)):
+    historical_prices = get_historical_prices(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
+    prices = get_shorter_prices(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
+    combined_data = historical_prices + prices 
+    return combined_data
 
