@@ -31,3 +31,12 @@ class MarketTypeSchema(BaseModel):
 
     class Config:
         orm_model = True
+
+
+class HistoricalDataSchema(BaseModel):
+
+    date: str
+    city_name: str
+    market_type: str
+    m2_price: int
+

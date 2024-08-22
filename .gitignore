@@ -7,6 +7,8 @@ __pycache__/
 
 *.db
 
+*.csv
+
 
 # React App
 

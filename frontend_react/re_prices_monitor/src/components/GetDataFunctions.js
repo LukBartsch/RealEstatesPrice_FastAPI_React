@@ -67,32 +67,51 @@ export const MarketOptions = (setMarketOptions) => {
 };
 
 
-export const FetchMultipleData = (selectedValue, selectedMarket, setChartDataSet, setDatasetLabels) => {
+export const FetchMultipleData = (selectedCity, selectedMarket, selectedDataType, setChartDataSet, setDatasetLabels) => {
 
-  useEffect(() => {
+    useEffect(() => {
 
-    const urlsToFetch = []
-    const datasetLabels  = []
 
-    if (selectedMarket.length > 0 && selectedValue.length > 0) {
-      for (let j = 0; j < selectedValue.length; j++) {
-        for (let i = 0; i < selectedMarket.length; i++) {
-          urlsToFetch.push("http://localhost:8000/prices/" + selectedValue[j].value + "/" + selectedMarket[i].value);
-          datasetLabels.push(selectedValue[j].value + " - rynek " + selectedMarket[i].value);
-        }
+      const urlsToFetch = []
+      const datasetLabels  = []
+
+
+
+      if (selectedDataType.value === "Historical data") {
+
+        if (selectedMarket.length > 0 && selectedCity.length > 0) {
+          for (let j = 0; j < selectedCity.length; j++) {
+            for (let i = 0; i < selectedMarket.length; i++) {
+              urlsToFetch.push("http://localhost:8000/get_historical_data/" + selectedCity[j].value + "/" + selectedMarket[i].value);
+              datasetLabels.push(selectedCity[j].value + " - rynek " + selectedMarket[i].value + " - historical data");
+            }
+          }
+        }   
+    
+      } else {
+
+        if (selectedMarket.length > 0 && selectedCity.length > 0) {
+          for (let j = 0; j < selectedCity.length; j++) {
+            for (let i = 0; i < selectedMarket.length; i++) {
+              urlsToFetch.push("http://localhost:8000/prices/" + selectedCity[j].value + "/" + selectedMarket[i].value);
+              datasetLabels.push(selectedCity[j].value + " - rynek " + selectedMarket[i].value);
+            }
+          }
+        } 
+
       }
-    } 
 
-    setDatasetLabels(datasetLabels);
+      setDatasetLabels(datasetLabels);
 
-    Promise.all(urlsToFetch.map(url => fetch(url).then(response => response.json())))
-      .then(responses => {
-        setChartDataSet(responses);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+      Promise.all(urlsToFetch.map(url => fetch(url).then(response => response.json())))
+        .then(responses => {
+          setChartDataSet(responses);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
 
-  }, [selectedValue, selectedMarket, setChartDataSet, setDatasetLabels]);
+
+    }, [selectedCity, selectedMarket, selectedDataType, setChartDataSet, setDatasetLabels]);
 
 };
