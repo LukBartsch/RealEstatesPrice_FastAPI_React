@@ -84,34 +84,19 @@ function App() {
   var xAxisLabels = [];
   const datasetColors = ["black", "orange", "grey", 'rgba(75, 192, 192, 1)'];
 
-  if (selectedDataType.value === "Current data" ) {
-    for (let i = 0; i < chartDataSet.length; i++) {
+  for (let i = 0; i < chartDataSet.length; i++) {
 
-      if (i === 0) {
-        xAxisLabels = chartDataSet[i].map((price) => price.date);
-      }
-      datasetList.push({
-        label: datasetLabels[i] + " [PLN/m2]",
-        data: chartDataSet[i].map((price) => price.m2_price),
-        borderColor: datasetColors[i],
-        borderWidth: 2
-      });
+    if (i === 0) {
+      xAxisLabels = chartDataSet[i].map((price) => price.date);
     }
-  } else if (selectedDataType.value === "Historical data") {
-
-      xAxisLabels = chartDataSet.map((price) => price.date);
-
-      datasetList.push({
-        label: datasetLabels[0] + " [PLN/m2]",
-        data: chartDataSet.map((price) => price.m2_price),
-        borderColor: datasetColors[0],
-        borderWidth: 2
-      });
-
-
+    datasetList.push({
+      label: datasetLabels[i] + " [PLN/m2]",
+      data: chartDataSet[i].map((price) => price.m2_price),
+      borderColor: datasetColors[i],
+      borderWidth: 2
+    });
   }
  
-  
 
   var chartData = {
     labels: xAxisLabels,

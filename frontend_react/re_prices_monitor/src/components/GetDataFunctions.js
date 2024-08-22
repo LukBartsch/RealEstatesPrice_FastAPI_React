@@ -72,35 +72,24 @@ export const FetchMultipleData = (selectedCity, selectedMarket, selectedDataType
     useEffect(() => {
 
 
+      const urlsToFetch = []
+      const datasetLabels  = []
+
+
 
       if (selectedDataType.value === "Historical data") {
 
         console.log("Historical data selected");
 
-        const datasetLabels  = ['Wrocław - pierwotny - historic']
+        urlsToFetch.push("http://localhost:8000/get_historical_data");
+        datasetLabels.push("Wrocław - pierwotny - Historical data");
 
-        setDatasetLabels(datasetLabels);
-
-        fetch("http://localhost:8000/get_historical_data/")
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json(); // Parses the JSON response into a JavaScript object
-          })
-          .then(data => {
-            setChartDataSet(data);
-          })
-          .catch(error => {
-            console.log("There was an error retrieving the historical data: ", error);
-          });
 
         
     
       } else {
 
-        const urlsToFetch = []
-        const datasetLabels  = []
+
   
         if (selectedMarket.length > 0 && selectedCity.length > 0) {
           for (let j = 0; j < selectedCity.length; j++) {
@@ -111,16 +100,18 @@ export const FetchMultipleData = (selectedCity, selectedMarket, selectedDataType
           }
         } 
 
-        setDatasetLabels(datasetLabels);
-
-        Promise.all(urlsToFetch.map(url => fetch(url).then(response => response.json())))
-          .then(responses => {
-            setChartDataSet(responses);
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-          });
       }
+
+      setDatasetLabels(datasetLabels);
+
+      Promise.all(urlsToFetch.map(url => fetch(url).then(response => response.json())))
+        .then(responses => {
+          setChartDataSet(responses);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+
 
     }, [selectedCity, selectedMarket, selectedDataType, setChartDataSet, setDatasetLabels]);
 
