@@ -67,7 +67,7 @@ async def get_historical_data(city_name:str, market_type: str, skip:int=0, limit
     return historical_prices
 
 
-@app.get("/combined_data/{city_name}/{market_type}", response_model=list[HistoricalDataSchema])
+@app.get("/combined_prices/{city_name}/{market_type}", response_model=list[HistoricalDataSchema])
 async def get_combined_data(city_name:str, market_type: str, skip:int=0, limit:int=100, db:Session=Depends(get_db)):
     historical_prices = get_historical_prices(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
     prices = get_shorter_prices(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)

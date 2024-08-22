@@ -77,9 +77,15 @@ export const FetchMultipleData = (selectedCity, selectedMarket, selectedDataType
 
 
       if (selectedDataType.length > 1) {
-        
-        urlsToFetch.push("http://localhost:8000/combined_data/Wrocław/pierwotny");
-        datasetLabels.push("Wrocław - rynek pierwotny - combined data");
+
+        if (selectedMarket.length > 0 && selectedCity.length > 0) {
+          for (let j = 0; j < selectedCity.length; j++) {
+            for (let i = 0; i < selectedMarket.length; i++) {
+              urlsToFetch.push("http://localhost:8000/combined_prices/" + selectedCity[j].value + "/" + selectedMarket[i].value);
+              datasetLabels.push(selectedCity[j].value + " - rynek " + selectedMarket[i].value + " - combained data");
+            }
+          }
+        }
 
       } else if (selectedDataType.length > 0) {
 
