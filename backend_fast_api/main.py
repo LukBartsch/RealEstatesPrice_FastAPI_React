@@ -61,7 +61,7 @@ async def get_markets_options(db:Session=Depends(get_db)):
     return markets
 
 
-@app.get("/get_historical_data/{city_name}/{market_type}", response_model=list[HistoricalDataSchema])
+@app.get("/historical_prices/{city_name}/{market_type}", response_model=list[HistoricalDataSchema])
 async def get_historical_data(city_name:str, market_type: str, skip:int=0, limit:int=100, db:Session=Depends(get_db)):
     historical_prices = get_historical_prices(db, city_name=city_name, market_type=market_type, skip=skip, limit=limit)
     return historical_prices
