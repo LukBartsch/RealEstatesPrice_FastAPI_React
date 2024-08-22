@@ -79,18 +79,17 @@ export const FetchMultipleData = (selectedCity, selectedMarket, selectedDataType
 
       if (selectedDataType.value === "Historical data") {
 
-        console.log("Historical data selected");
-
-        urlsToFetch.push("http://localhost:8000/get_historical_data");
-        datasetLabels.push("Wrocław - pierwotny - Historical data");
-
-
-        
+        if (selectedMarket.length > 0 && selectedCity.length > 0) {
+          for (let j = 0; j < selectedCity.length; j++) {
+            for (let i = 0; i < selectedMarket.length; i++) {
+              urlsToFetch.push("http://localhost:8000/get_historical_data/" + selectedCity[j].value + "/" + selectedMarket[i].value);
+              datasetLabels.push(selectedCity[j].value + " - rynek " + selectedMarket[i].value + " - historical data");
+            }
+          }
+        }   
     
       } else {
 
-
-  
         if (selectedMarket.length > 0 && selectedCity.length > 0) {
           for (let j = 0; j < selectedCity.length; j++) {
             for (let i = 0; i < selectedMarket.length; i++) {
