@@ -38,5 +38,5 @@ class HistoricalDataSchema(BaseModel):
     date: str
     city_name: str
     market_type: str
-    m2_price: int
+    m2_price: str
 

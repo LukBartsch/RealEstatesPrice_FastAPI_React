@@ -79,12 +79,14 @@ async def get_historical_data():
         next(reader)
 
         for row in reader:
-            historical_row_wro_pierwotny = HistoricalDataSchema(date=row[0], city_name="Wrocław", market_type="pierwotny", m2_price=row[2])
-            historical_row_wro_wtorny = HistoricalDataSchema(date=row[0], city_name="Wrocław", market_type="wtorny", m2_price=row[4])
+            historical_row_osw_pierwotny = HistoricalDataSchema(date=row[0], city_name="Ostrów Wlkp.", market_type="pierwotny", m2_price=str(row[1]))
+            historical_row_wro_pierwotny = HistoricalDataSchema(date=row[0], city_name="Wrocław", market_type="pierwotny", m2_price=str(row[2]))
+            historical_row_wro_wtorny = HistoricalDataSchema(date=row[0], city_name="Wrocław", market_type="wtorny", m2_price=str(row[4]))
+            osw_pierwotny.append(historical_row_osw_pierwotny)
             wro_pierwotny.append(historical_row_wro_pierwotny)
             wro_wtorny.append(historical_row_wro_wtorny)
 
         data.append(wro_pierwotny)
 
-    return data
+    return osw_pierwotny
 
