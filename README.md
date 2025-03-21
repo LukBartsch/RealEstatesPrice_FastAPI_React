@@ -1,12 +1,12 @@
 
 # Real Estates Prices Monitor - FastAPI & React
-Web application for monitoring real estate prices. You can see [_here_](#).
+Web application for monitoring real estates prices. You can see [_here_](#).
 
 
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
-* [Main View](#features)
+* [Main View](#main-view)
 * [Setup](#setup)
 * [Project Status](#project-status)
 * [Contributing](#contributing)
@@ -36,11 +36,13 @@ The database also stores historical data on real estates prices (since 2006) whi
 
 The application is a single-page website where the user can select the city, market type and data type. The Chart.js library was used to generate line charts.
 
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/04e2edf4-5afe-4f57-b9c1-a655342898de)
+
 
 Below the graph there is also information in a table about the current average prices of apartments per square meter. And information about the average area or number of rooms.
 
-![alt text](image-1.png)
+![image](https://github.com/user-attachments/assets/72af01ff-e17f-4baa-89c3-4c8c794d4eae)
+
 
 ## Setup
 - Clone repository
