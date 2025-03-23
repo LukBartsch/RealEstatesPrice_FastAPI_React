@@ -41,7 +41,8 @@ The application is a single-page website where the user can select the city, mar
 
 Below the graph there is also information in a table about the current average prices of apartments per square meter. And information about the average area or number of rooms.
 
-![image](https://github.com/user-attachments/assets/72af01ff-e17f-4baa-89c3-4c8c794d4eae)
+![image](https://github.com/user-attachments/assets/b5a99f2c-4385-47d1-af76-cacfcc2a738c)
+
 
 
 ## Setup
